@@ -9,7 +9,10 @@ db.serialize(() => {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       username TEXT UNIQUE NOT NULL,
       passwordHash TEXT NOT NULL,
-      balance REAL NOT NULL DEFAULT 0
+      balance REAL NOT NULL DEFAULT 0,
+      points INTEGER NOT NULL DEFAULT 500, -- Starting points
+      referredBy INTEGER,
+      FOREIGN KEY(referredBy) REFERENCES users(id)
     )
   `);
 
@@ -19,6 +22,7 @@ db.serialize(() => {
       title TEXT NOT NULL,
       hostId INTEGER NOT NULL,
       stake REAL NOT NULL,
+      currencyType TEXT NOT NULL DEFAULT 'USD', -- 'USD' or 'PTS'
       status TEXT NOT NULL DEFAULT 'open',
       type TEXT NOT NULL DEFAULT 'manual', -- 'manual' or 'dice'
       gameTitle TEXT, -- 'PUBG', 'COD', 'PES', etc.
@@ -27,6 +31,17 @@ db.serialize(() => {
       winnerId INTEGER,
       FOREIGN KEY(hostId) REFERENCES users(id),
       FOREIGN KEY(winnerId) REFERENCES users(id)
+    )
+  `);
+
+  db.run(`
+    CREATE TABLE IF NOT EXISTS transactions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      userId INTEGER NOT NULL,
+      amount REAL NOT NULL,
+      type TEXT NOT NULL,
+      createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY(userId) REFERENCES users(id)
     )
   `);
 

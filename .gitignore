@@ -1,3 +1,11 @@
 node_modules/
+node_portable/
+node_portable.zip
 data.sqlite
 .env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.vscode/
+.idea/
+.DS_Store
